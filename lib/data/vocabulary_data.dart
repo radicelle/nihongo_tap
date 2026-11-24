@@ -1,19 +1,37 @@
+import 'package:nihongo_tap/data/context_vocabulary_data.dart';
 import 'package:nihongo_tap/models/word_entry.dart';
 
-/// Filters and sorts [all] vocabulary entries by [tab] and optional search [query].
+/// Filters and sorts [all] vocabulary entries by [tab], optional [context], and search [query].
 List<WordEntry> filterVocabulary(
   List<WordEntry> all,
   FilterTab tab,
-  String query,
-) {
-  Iterable<WordEntry> items = switch (tab) {
-    FilterTab.everyday => all.where((w) => w.isEveryday),
-    FilterTab.nouns => all.where((w) => w.category == WordCategory.noun),
-    FilterTab.verbs => all.where((w) => w.category == WordCategory.verb),
-    FilterTab.adjectives =>
-      all.where((w) => w.category == WordCategory.adjective),
-    FilterTab.other => all.where((w) => w.category == WordCategory.other),
-  };
+  String query, {
+  ContextCategory? context,
+}) {
+  Iterable<WordEntry> items = all;
+
+  if (context != null) {
+    items = items.where((w) => w.contexts.contains(context));
+    if (tab != FilterTab.everyday) {
+      items = switch (tab) {
+        FilterTab.everyday => items,
+        FilterTab.nouns => items.where((w) => w.category == WordCategory.noun),
+        FilterTab.verbs => items.where((w) => w.category == WordCategory.verb),
+        FilterTab.adjectives =>
+          items.where((w) => w.category == WordCategory.adjective),
+        FilterTab.other => items.where((w) => w.category == WordCategory.other),
+      };
+    }
+  } else {
+    items = switch (tab) {
+      FilterTab.everyday => items.where((w) => w.isEveryday),
+      FilterTab.nouns => items.where((w) => w.category == WordCategory.noun),
+      FilterTab.verbs => items.where((w) => w.category == WordCategory.verb),
+      FilterTab.adjectives =>
+        items.where((w) => w.category == WordCategory.adjective),
+      FilterTab.other => items.where((w) => w.category == WordCategory.other),
+    };
+  }
 
   final trimmed = query.trim().toLowerCase();
   if (trimmed.isNotEmpty) {
@@ -33,8 +51,14 @@ List<WordEntry> filterVocabulary(
   return result;
 }
 
-/// Curated everyday Japanese vocabulary ordered by usefulness and category.
+/// Curated everyday Japanese vocabulary ordered by usefulness and category,
+/// combined with expanded situational lexical fields.
 const List<WordEntry> kVocabularyList = [
+  ..._coreVocabulary,
+  ...kContextVocabulary,
+];
+
+const List<WordEntry> _coreVocabulary = [
   // =========================================================================
   // EVERYDAY ESSENTIALS (Other / Greetings / Expressions)
   // =========================================================================
@@ -45,6 +69,14 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'arigatou',
     english: 'Thank you',
     category: WordCategory.other,
+    contexts: {
+      ContextCategory.social,
+      ContextCategory.wedding,
+      ContextCategory.restaurant,
+      ContextCategory.shop,
+      ContextCategory.party,
+      ContextCategory.hotel,
+    },
     isEveryday: true,
     everydayRank: 1,
   ),
@@ -55,6 +87,14 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'sumimasen',
     english: 'Excuse me / Sorry',
     category: WordCategory.other,
+    contexts: {
+      ContextCategory.social,
+      ContextCategory.restaurant,
+      ContextCategory.shop,
+      ContextCategory.train,
+      ContextCategory.hotel,
+      ContextCategory.wedding,
+    },
     isEveryday: true,
     everydayRank: 2,
   ),
@@ -65,6 +105,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'ohayou gozaimasu',
     english: 'Good morning (polite)',
     category: WordCategory.other,
+    contexts: {
+      ContextCategory.social,
+      ContextCategory.work,
+      ContextCategory.school,
+      ContextCategory.hotel,
+    },
     isEveryday: true,
     everydayRank: 3,
   ),
@@ -75,6 +121,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'konnichiwa',
     english: 'Hello / Good afternoon',
     category: WordCategory.other,
+    contexts: {
+      ContextCategory.social,
+      ContextCategory.shop,
+      ContextCategory.wedding,
+      ContextCategory.travel,
+    },
     isEveryday: true,
     everydayRank: 4,
   ),
@@ -85,6 +137,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'konbanwa',
     english: 'Good evening',
     category: WordCategory.other,
+    contexts: {
+      ContextCategory.social,
+      ContextCategory.restaurant,
+      ContextCategory.party,
+      ContextCategory.hotel,
+    },
     isEveryday: true,
     everydayRank: 5,
   ),
@@ -95,6 +153,13 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'hai',
     english: 'Yes',
     category: WordCategory.other,
+    contexts: {
+      ContextCategory.social,
+      ContextCategory.restaurant,
+      ContextCategory.shop,
+      ContextCategory.work,
+      ContextCategory.school,
+    },
     isEveryday: true,
     everydayRank: 6,
   ),
@@ -105,6 +170,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'iie',
     english: 'No',
     category: WordCategory.other,
+    contexts: {
+      ContextCategory.social,
+      ContextCategory.restaurant,
+      ContextCategory.shop,
+      ContextCategory.hotel,
+    },
     isEveryday: true,
     everydayRank: 7,
   ),
@@ -115,6 +186,13 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'onegaishimasu',
     english: 'Please (requesting)',
     category: WordCategory.other,
+    contexts: {
+      ContextCategory.social,
+      ContextCategory.restaurant,
+      ContextCategory.shop,
+      ContextCategory.hotel,
+      ContextCategory.wedding,
+    },
     isEveryday: true,
     everydayRank: 8,
   ),
@@ -125,6 +203,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'daijoubu',
     english: 'Okay / All right',
     category: WordCategory.other,
+    contexts: {
+      ContextCategory.social,
+      ContextCategory.health,
+      ContextCategory.shop,
+      ContextCategory.restaurant,
+    },
     isEveryday: true,
     everydayRank: 9,
   ),
@@ -135,6 +219,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'wakarimashita',
     english: 'I understand / Got it',
     category: WordCategory.other,
+    contexts: {
+      ContextCategory.social,
+      ContextCategory.work,
+      ContextCategory.school,
+      ContextCategory.travel,
+    },
     isEveryday: true,
     everydayRank: 10,
   ),
@@ -145,6 +235,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'gomennasai',
     english: "I'm sorry",
     category: WordCategory.other,
+    contexts: {ContextCategory.social, ContextCategory.home, ContextCategory.party},
     isEveryday: true,
     everydayRank: 11,
   ),
@@ -155,6 +246,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'sayounara',
     english: 'Goodbye',
     category: WordCategory.other,
+    contexts: {ContextCategory.social, ContextCategory.school},
   ),
   WordEntry(
     id: 'other_itadakimasu',
@@ -163,6 +255,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'itadakimasu',
     english: 'Thank you for the meal (before eating)',
     category: WordCategory.other,
+    contexts: {
+      ContextCategory.restaurant,
+      ContextCategory.cooking,
+      ContextCategory.home,
+      ContextCategory.wedding,
+    },
   ),
   WordEntry(
     id: 'other_gochisousama',
@@ -171,6 +269,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'gochisousama deshita',
     english: 'Thank you for the meal (after eating)',
     category: WordCategory.other,
+    contexts: {
+      ContextCategory.restaurant,
+      ContextCategory.cooking,
+      ContextCategory.home,
+      ContextCategory.wedding,
+    },
   ),
   WordEntry(
     id: 'other_watashi',
@@ -179,6 +283,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'watashi',
     english: 'I / Me',
     category: WordCategory.other,
+    contexts: {ContextCategory.social, ContextCategory.school, ContextCategory.work},
   ),
   WordEntry(
     id: 'other_anata',
@@ -187,6 +292,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'anata',
     english: 'You',
     category: WordCategory.other,
+    contexts: {ContextCategory.social},
   ),
   WordEntry(
     id: 'other_kore',
@@ -195,6 +301,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'kore',
     english: 'This (near me)',
     category: WordCategory.other,
+    contexts: {
+      ContextCategory.shop,
+      ContextCategory.restaurant,
+      ContextCategory.cooking,
+      ContextCategory.travel,
+    },
     isEveryday: true,
     everydayRank: 12,
   ),
@@ -205,6 +317,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'sore',
     english: 'That (near you)',
     category: WordCategory.other,
+    contexts: {ContextCategory.shop, ContextCategory.restaurant, ContextCategory.home},
   ),
   WordEntry(
     id: 'other_are',
@@ -213,6 +326,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'are',
     english: 'That (over there)',
     category: WordCategory.other,
+    contexts: {ContextCategory.shop, ContextCategory.travel},
   ),
   WordEntry(
     id: 'other_nani',
@@ -221,6 +335,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'nani',
     english: 'What',
     category: WordCategory.other,
+    contexts: {
+      ContextCategory.social,
+      ContextCategory.restaurant,
+      ContextCategory.shop,
+      ContextCategory.school,
+    },
     isEveryday: true,
     everydayRank: 13,
   ),
@@ -231,6 +351,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'doko',
     english: 'Where',
     category: WordCategory.other,
+    contexts: {
+      ContextCategory.travel,
+      ContextCategory.train,
+      ContextCategory.shop,
+      ContextCategory.hotel,
+    },
     isEveryday: true,
     everydayRank: 14,
   ),
@@ -241,6 +367,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'itsu',
     english: 'When',
     category: WordCategory.other,
+    contexts: {
+      ContextCategory.travel,
+      ContextCategory.train,
+      ContextCategory.work,
+      ContextCategory.wedding,
+    },
   ),
   WordEntry(
     id: 'other_dare',
@@ -249,6 +381,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'dare',
     english: 'Who',
     category: WordCategory.other,
+    contexts: {ContextCategory.social, ContextCategory.party, ContextCategory.wedding},
   ),
   WordEntry(
     id: 'other_dou',
@@ -257,6 +390,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'dou',
     english: 'How',
     category: WordCategory.other,
+    contexts: {ContextCategory.social, ContextCategory.restaurant, ContextCategory.health},
   ),
   WordEntry(
     id: 'other_ikura',
@@ -265,6 +399,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'ikura',
     english: 'How much (price)',
     category: WordCategory.other,
+    contexts: {ContextCategory.shop, ContextCategory.restaurant, ContextCategory.travel},
     isEveryday: true,
     everydayRank: 15,
   ),
@@ -275,6 +410,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'totemo',
     english: 'Very',
     category: WordCategory.other,
+    contexts: {
+      ContextCategory.social,
+      ContextCategory.restaurant,
+      ContextCategory.wedding,
+      ContextCategory.weather,
+    },
   ),
   WordEntry(
     id: 'other_sukoshi',
@@ -283,6 +424,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'sukoshi',
     english: 'A little',
     category: WordCategory.other,
+    contexts: {ContextCategory.cooking, ContextCategory.restaurant, ContextCategory.social},
   ),
   WordEntry(
     id: 'other_mou',
@@ -291,6 +433,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'mou',
     english: 'Already / More',
     category: WordCategory.other,
+    contexts: {ContextCategory.restaurant, ContextCategory.work, ContextCategory.train},
   ),
   WordEntry(
     id: 'other_mada',
@@ -299,6 +442,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'mada',
     english: 'Not yet / Still',
     category: WordCategory.other,
+    contexts: {ContextCategory.work, ContextCategory.train, ContextCategory.school},
   ),
   WordEntry(
     id: 'other_itsumo',
@@ -307,6 +451,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'itsumo',
     english: 'Always',
     category: WordCategory.other,
+    contexts: {ContextCategory.social, ContextCategory.home, ContextCategory.work},
   ),
   WordEntry(
     id: 'other_yoku',
@@ -315,6 +460,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'yoku',
     english: 'Often / Well',
     category: WordCategory.other,
+    contexts: {ContextCategory.social, ContextCategory.cooking, ContextCategory.health},
   ),
   WordEntry(
     id: 'other_yukkuri',
@@ -323,6 +469,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'yukkuri',
     english: 'Slowly',
     category: WordCategory.other,
+    contexts: {
+      ContextCategory.social,
+      ContextCategory.travel,
+      ContextCategory.hotel,
+      ContextCategory.health,
+    },
   ),
   WordEntry(
     id: 'other_soshite',
@@ -331,6 +483,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'soshite',
     english: 'And / Then',
     category: WordCategory.other,
+    contexts: {ContextCategory.school, ContextCategory.social},
   ),
   WordEntry(
     id: 'other_demo',
@@ -339,6 +492,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'demo',
     english: 'But / However',
     category: WordCategory.other,
+    contexts: {ContextCategory.social, ContextCategory.work},
   ),
   WordEntry(
     id: 'other_kara',
@@ -347,6 +501,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'kara',
     english: 'From / Because',
     category: WordCategory.other,
+    contexts: {ContextCategory.train, ContextCategory.work, ContextCategory.school},
   ),
   WordEntry(
     id: 'other_made',
@@ -355,6 +510,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'made',
     english: 'Until / Up to',
     category: WordCategory.other,
+    contexts: {ContextCategory.train, ContextCategory.travel, ContextCategory.work},
   ),
 
   // =========================================================================
@@ -367,6 +523,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'mizu',
     english: 'Water',
     category: WordCategory.noun,
+    contexts: {
+      ContextCategory.restaurant,
+      ContextCategory.cooking,
+      ContextCategory.home,
+      ContextCategory.health,
+    },
     isEveryday: true,
     everydayRank: 16,
   ),
@@ -377,6 +539,11 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'gohan',
     english: 'Rice / Meal',
     category: WordCategory.noun,
+    contexts: {
+      ContextCategory.restaurant,
+      ContextCategory.cooking,
+      ContextCategory.home,
+    },
     isEveryday: true,
     everydayRank: 17,
   ),
@@ -387,6 +554,11 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'ocha',
     english: 'Tea (green tea)',
     category: WordCategory.noun,
+    contexts: {
+      ContextCategory.restaurant,
+      ContextCategory.home,
+      ContextCategory.hotel,
+    },
     isEveryday: true,
     everydayRank: 18,
   ),
@@ -397,6 +569,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'koohii',
     english: 'Coffee',
     category: WordCategory.noun,
+    contexts: {ContextCategory.restaurant, ContextCategory.work, ContextCategory.home},
   ),
   WordEntry(
     id: 'noun_pan',
@@ -405,6 +578,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'pan',
     english: 'Bread',
     category: WordCategory.noun,
+    contexts: {ContextCategory.cooking, ContextCategory.shop, ContextCategory.home},
   ),
   WordEntry(
     id: 'noun_jikan',
@@ -413,6 +587,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'jikan',
     english: 'Time / Hour',
     category: WordCategory.noun,
+    contexts: {
+      ContextCategory.work,
+      ContextCategory.train,
+      ContextCategory.school,
+      ContextCategory.wedding,
+    },
     isEveryday: true,
     everydayRank: 19,
   ),
@@ -423,6 +603,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'kyou',
     english: 'Today',
     category: WordCategory.noun,
+    contexts: {
+      ContextCategory.weather,
+      ContextCategory.work,
+      ContextCategory.school,
+      ContextCategory.wedding,
+    },
     isEveryday: true,
     everydayRank: 20,
   ),
@@ -433,6 +619,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'ashita',
     english: 'Tomorrow',
     category: WordCategory.noun,
+    contexts: {
+      ContextCategory.weather,
+      ContextCategory.work,
+      ContextCategory.travel,
+      ContextCategory.school,
+    },
     isEveryday: true,
     everydayRank: 21,
   ),
@@ -443,6 +635,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'kinou',
     english: 'Yesterday',
     category: WordCategory.noun,
+    contexts: {ContextCategory.weather, ContextCategory.school, ContextCategory.work},
   ),
   WordEntry(
     id: 'noun_ima',
@@ -451,6 +644,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'ima',
     english: 'Now',
     category: WordCategory.noun,
+    contexts: {ContextCategory.work, ContextCategory.train, ContextCategory.social},
     isEveryday: true,
     everydayRank: 22,
   ),
@@ -461,6 +655,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'asa',
     english: 'Morning',
     category: WordCategory.noun,
+    contexts: {ContextCategory.home, ContextCategory.hotel, ContextCategory.weather},
   ),
   WordEntry(
     id: 'noun_yoru',
@@ -469,6 +664,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'yoru',
     english: 'Night',
     category: WordCategory.noun,
+    contexts: {ContextCategory.party, ContextCategory.restaurant, ContextCategory.hotel},
   ),
   WordEntry(
     id: 'noun_hito',
@@ -477,6 +673,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'hito',
     english: 'Person',
     category: WordCategory.noun,
+    contexts: {ContextCategory.social, ContextCategory.party, ContextCategory.wedding},
     isEveryday: true,
     everydayRank: 23,
   ),
@@ -487,6 +684,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'tomodachi',
     english: 'Friend',
     category: WordCategory.noun,
+    contexts: {
+      ContextCategory.social,
+      ContextCategory.party,
+      ContextCategory.wedding,
+      ContextCategory.school,
+    },
   ),
   WordEntry(
     id: 'noun_kazoku',
@@ -495,6 +698,11 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'kazoku',
     english: 'Family',
     category: WordCategory.noun,
+    contexts: {
+      ContextCategory.home,
+      ContextCategory.wedding,
+      ContextCategory.social,
+    },
   ),
   WordEntry(
     id: 'noun_ie',
@@ -503,6 +711,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'ie',
     english: 'House / Home',
     category: WordCategory.noun,
+    contexts: {ContextCategory.home},
     isEveryday: true,
     everydayRank: 24,
   ),
@@ -513,6 +722,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'eki',
     english: 'Train station',
     category: WordCategory.noun,
+    contexts: {ContextCategory.train, ContextCategory.travel},
     isEveryday: true,
     everydayRank: 25,
   ),
@@ -523,6 +733,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'densha',
     english: 'Train',
     category: WordCategory.noun,
+    contexts: {ContextCategory.train, ContextCategory.travel},
     isEveryday: true,
     everydayRank: 26,
   ),
@@ -533,6 +744,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'basu',
     english: 'Bus',
     category: WordCategory.noun,
+    contexts: {ContextCategory.travel, ContextCategory.train},
   ),
   WordEntry(
     id: 'noun_kuruma',
@@ -541,6 +753,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'kuruma',
     english: 'Car',
     category: WordCategory.noun,
+    contexts: {ContextCategory.travel, ContextCategory.home},
   ),
   WordEntry(
     id: 'noun_okane',
@@ -549,6 +762,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'okane',
     english: 'Money',
     category: WordCategory.noun,
+    contexts: {
+      ContextCategory.shop,
+      ContextCategory.restaurant,
+      ContextCategory.travel,
+      ContextCategory.wedding,
+    },
     isEveryday: true,
     everydayRank: 27,
   ),
@@ -559,6 +778,13 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'toire',
     english: 'Restroom / Toilet',
     category: WordCategory.noun,
+    contexts: {
+      ContextCategory.restaurant,
+      ContextCategory.train,
+      ContextCategory.hotel,
+      ContextCategory.shop,
+      ContextCategory.wedding,
+    },
     isEveryday: true,
     everydayRank: 28,
   ),
@@ -569,6 +795,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'mise',
     english: 'Shop / Store',
     category: WordCategory.noun,
+    contexts: {ContextCategory.shop, ContextCategory.restaurant},
   ),
   WordEntry(
     id: 'noun_kaisha',
@@ -577,6 +804,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'kaisha',
     english: 'Company / Office',
     category: WordCategory.noun,
+    contexts: {ContextCategory.work},
   ),
   WordEntry(
     id: 'noun_gakkou',
@@ -585,6 +813,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'gakkou',
     english: 'School',
     category: WordCategory.noun,
+    contexts: {ContextCategory.school},
   ),
   WordEntry(
     id: 'noun_shigoto',
@@ -593,6 +822,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'shigoto',
     english: 'Work / Job',
     category: WordCategory.noun,
+    contexts: {ContextCategory.work},
   ),
   WordEntry(
     id: 'noun_namae',
@@ -601,6 +831,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'namae',
     english: 'Name',
     category: WordCategory.noun,
+    contexts: {
+      ContextCategory.social,
+      ContextCategory.hotel,
+      ContextCategory.wedding,
+      ContextCategory.school,
+    },
   ),
   WordEntry(
     id: 'noun_hon',
@@ -609,6 +845,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'hon',
     english: 'Book',
     category: WordCategory.noun,
+    contexts: {ContextCategory.school, ContextCategory.home, ContextCategory.shop},
   ),
   WordEntry(
     id: 'noun_denwa',
@@ -617,6 +854,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'denwa',
     english: 'Phone / Call',
     category: WordCategory.noun,
+    contexts: {ContextCategory.work, ContextCategory.hotel, ContextCategory.social},
   ),
   WordEntry(
     id: 'noun_sumaho',
@@ -625,6 +863,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'sumaho',
     english: 'Smartphone',
     category: WordCategory.noun,
+    contexts: {ContextCategory.work, ContextCategory.travel, ContextCategory.shop},
   ),
   WordEntry(
     id: 'noun_tenki',
@@ -633,6 +872,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'tenki',
     english: 'Weather',
     category: WordCategory.noun,
+    contexts: {ContextCategory.weather, ContextCategory.travel},
   ),
   WordEntry(
     id: 'noun_ame',
@@ -641,6 +881,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'ame',
     english: 'Rain',
     category: WordCategory.noun,
+    contexts: {ContextCategory.weather},
   ),
   WordEntry(
     id: 'noun_michi',
@@ -649,6 +890,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'michi',
     english: 'Road / Street',
     category: WordCategory.noun,
+    contexts: {ContextCategory.travel, ContextCategory.train},
   ),
   WordEntry(
     id: 'noun_heya',
@@ -657,6 +899,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'heya',
     english: 'Room',
     category: WordCategory.noun,
+    contexts: {ContextCategory.home, ContextCategory.hotel},
   ),
   WordEntry(
     id: 'noun_tabemono',
@@ -665,6 +908,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'tabemono',
     english: 'Food',
     category: WordCategory.noun,
+    contexts: {
+      ContextCategory.restaurant,
+      ContextCategory.cooking,
+      ContextCategory.party,
+      ContextCategory.shop,
+    },
   ),
   WordEntry(
     id: 'noun_nomimono',
@@ -673,6 +922,11 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'nomimono',
     english: 'Drink / Beverage',
     category: WordCategory.noun,
+    contexts: {
+      ContextCategory.restaurant,
+      ContextCategory.party,
+      ContextCategory.shop,
+    },
   ),
   WordEntry(
     id: 'noun_nihongo',
@@ -681,6 +935,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'nihongo',
     english: 'Japanese language',
     category: WordCategory.noun,
+    contexts: {ContextCategory.school, ContextCategory.travel, ContextCategory.social},
   ),
   WordEntry(
     id: 'noun_eigo',
@@ -689,6 +944,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'eigo',
     english: 'English language',
     category: WordCategory.noun,
+    contexts: {ContextCategory.school, ContextCategory.travel, ContextCategory.hotel},
   ),
   WordEntry(
     id: 'noun_byouin',
@@ -697,6 +953,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'byouin',
     english: 'Hospital / Clinic',
     category: WordCategory.noun,
+    contexts: {ContextCategory.health},
   ),
   WordEntry(
     id: 'noun_kagi',
@@ -705,6 +962,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'kagi',
     english: 'Key',
     category: WordCategory.noun,
+    contexts: {ContextCategory.hotel, ContextCategory.home},
   ),
 
   // =========================================================================
@@ -717,6 +975,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'taberu',
     english: 'To eat',
     category: WordCategory.verb,
+    contexts: {
+      ContextCategory.restaurant,
+      ContextCategory.cooking,
+      ContextCategory.party,
+      ContextCategory.home,
+    },
     isEveryday: true,
     everydayRank: 29,
     verbGroup: VerbGroup.ichidan,
@@ -742,6 +1006,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'nomu',
     english: 'To drink',
     category: WordCategory.verb,
+    contexts: {
+      ContextCategory.restaurant,
+      ContextCategory.party,
+      ContextCategory.wedding,
+      ContextCategory.health,
+    },
     isEveryday: true,
     everydayRank: 30,
     verbGroup: VerbGroup.godan,
@@ -767,6 +1037,13 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'iku',
     english: 'To go',
     category: WordCategory.verb,
+    contexts: {
+      ContextCategory.train,
+      ContextCategory.travel,
+      ContextCategory.school,
+      ContextCategory.work,
+      ContextCategory.wedding,
+    },
     isEveryday: true,
     everydayRank: 31,
     verbGroup: VerbGroup.godan,
@@ -792,6 +1069,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'kuru',
     english: 'To come',
     category: WordCategory.verb,
+    contexts: {
+      ContextCategory.social,
+      ContextCategory.party,
+      ContextCategory.wedding,
+      ContextCategory.train,
+    },
     isEveryday: true,
     everydayRank: 32,
     verbGroup: VerbGroup.irregularKuru,
@@ -817,6 +1100,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'miru',
     english: 'To see / To watch',
     category: WordCategory.verb,
+    contexts: {
+      ContextCategory.travel,
+      ContextCategory.shop,
+      ContextCategory.restaurant,
+      ContextCategory.wedding,
+    },
     isEveryday: true,
     everydayRank: 33,
     verbGroup: VerbGroup.ichidan,
@@ -842,6 +1131,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'kiku',
     english: 'To listen / To ask',
     category: WordCategory.verb,
+    contexts: {
+      ContextCategory.school,
+      ContextCategory.party,
+      ContextCategory.travel,
+      ContextCategory.work,
+    },
     isEveryday: true,
     everydayRank: 34,
     verbGroup: VerbGroup.godan,
@@ -867,6 +1162,13 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'hanasu',
     english: 'To speak / To talk',
     category: WordCategory.verb,
+    contexts: {
+      ContextCategory.social,
+      ContextCategory.party,
+      ContextCategory.work,
+      ContextCategory.school,
+      ContextCategory.wedding,
+    },
     isEveryday: true,
     everydayRank: 35,
     verbGroup: VerbGroup.godan,
@@ -892,6 +1194,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'suru',
     english: 'To do',
     category: WordCategory.verb,
+    contexts: {
+      ContextCategory.work,
+      ContextCategory.home,
+      ContextCategory.party,
+      ContextCategory.school,
+    },
     isEveryday: true,
     everydayRank: 36,
     verbGroup: VerbGroup.irregularSuru,
@@ -917,6 +1225,11 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'kau',
     english: 'To buy',
     category: WordCategory.verb,
+    contexts: {
+      ContextCategory.shop,
+      ContextCategory.travel,
+      ContextCategory.cooking,
+    },
     isEveryday: true,
     everydayRank: 37,
     verbGroup: VerbGroup.godan,
@@ -936,6 +1249,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'neru',
     english: 'To sleep / Go to bed',
     category: WordCategory.verb,
+    contexts: {ContextCategory.home, ContextCategory.hotel, ContextCategory.health},
     isEveryday: true,
     everydayRank: 38,
     verbGroup: VerbGroup.ichidan,
@@ -955,6 +1269,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'wakaru',
     english: 'To understand',
     category: WordCategory.verb,
+    contexts: {ContextCategory.school, ContextCategory.social, ContextCategory.work},
     isEveryday: true,
     everydayRank: 39,
     verbGroup: VerbGroup.godan,
@@ -974,6 +1289,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'tsukau',
     english: 'To use',
     category: WordCategory.verb,
+    contexts: {
+      ContextCategory.work,
+      ContextCategory.cooking,
+      ContextCategory.shop,
+      ContextCategory.train,
+    },
     isEveryday: true,
     everydayRank: 40,
     verbGroup: VerbGroup.godan,
@@ -993,6 +1314,11 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'yomu',
     english: 'To read',
     category: WordCategory.verb,
+    contexts: {
+      ContextCategory.school,
+      ContextCategory.restaurant,
+      ContextCategory.work,
+    },
     verbGroup: VerbGroup.godan,
     examples: [
       ExampleSentence(
@@ -1010,6 +1336,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'kaku',
     english: 'To write',
     category: WordCategory.verb,
+    contexts: {
+      ContextCategory.school,
+      ContextCategory.work,
+      ContextCategory.hotel,
+      ContextCategory.wedding,
+    },
     verbGroup: VerbGroup.godan,
     examples: [
       ExampleSentence(
@@ -1027,6 +1359,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'matsu',
     english: 'To wait',
     category: WordCategory.verb,
+    contexts: {
+      ContextCategory.train,
+      ContextCategory.restaurant,
+      ContextCategory.shop,
+      ContextCategory.hotel,
+    },
     verbGroup: VerbGroup.godan,
     examples: [
       ExampleSentence(
@@ -1044,6 +1382,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'motsu',
     english: 'To hold / To carry',
     category: WordCategory.verb,
+    contexts: {ContextCategory.shop, ContextCategory.travel, ContextCategory.hotel},
     verbGroup: VerbGroup.godan,
     examples: [
       ExampleSentence(
@@ -1061,6 +1400,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'tsukuru',
     english: 'To make / To cook',
     category: WordCategory.verb,
+    contexts: {ContextCategory.cooking, ContextCategory.home, ContextCategory.work},
     verbGroup: VerbGroup.godan,
     examples: [
       ExampleSentence(
@@ -1078,6 +1418,11 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'toru',
     english: 'To take',
     category: WordCategory.verb,
+    contexts: {
+      ContextCategory.travel,
+      ContextCategory.wedding,
+      ContextCategory.party,
+    },
     verbGroup: VerbGroup.godan,
     examples: [
       ExampleSentence(
@@ -1095,6 +1440,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'kaeru',
     english: 'To go home / Return',
     category: WordCategory.verb,
+    contexts: {
+      ContextCategory.home,
+      ContextCategory.train,
+      ContextCategory.work,
+      ContextCategory.party,
+    },
     verbGroup: VerbGroup.godan,
     examples: [
       ExampleSentence(
@@ -1112,6 +1463,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'okiru',
     english: 'To wake up',
     category: WordCategory.verb,
+    contexts: {ContextCategory.home, ContextCategory.hotel},
     verbGroup: VerbGroup.ichidan,
     examples: [
       ExampleSentence(
@@ -1129,6 +1481,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'oshieru',
     english: 'To teach / To tell',
     category: WordCategory.verb,
+    contexts: {ContextCategory.school, ContextCategory.travel, ContextCategory.work},
     verbGroup: VerbGroup.ichidan,
     examples: [
       ExampleSentence(
@@ -1146,6 +1499,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'akeru',
     english: 'To open',
     category: WordCategory.verb,
+    contexts: {ContextCategory.home, ContextCategory.hotel, ContextCategory.shop},
     verbGroup: VerbGroup.ichidan,
     examples: [
       ExampleSentence(
@@ -1163,6 +1517,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'shimeru',
     english: 'To close',
     category: WordCategory.verb,
+    contexts: {ContextCategory.home, ContextCategory.hotel, ContextCategory.shop},
     verbGroup: VerbGroup.ichidan,
     examples: [
       ExampleSentence(
@@ -1180,6 +1535,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'oboeru',
     english: 'To remember / Memorize',
     category: WordCategory.verb,
+    contexts: {ContextCategory.school, ContextCategory.work},
     verbGroup: VerbGroup.ichidan,
     examples: [
       ExampleSentence(
@@ -1197,6 +1553,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'wasureru',
     english: 'To forget',
     category: WordCategory.verb,
+    contexts: {
+      ContextCategory.school,
+      ContextCategory.home,
+      ContextCategory.hotel,
+      ContextCategory.train,
+    },
     verbGroup: VerbGroup.ichidan,
     examples: [
       ExampleSentence(
@@ -1214,6 +1576,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'kiru',
     english: 'To wear (upper body)',
     category: WordCategory.verb,
+    contexts: {ContextCategory.wedding, ContextCategory.shop, ContextCategory.weather},
     verbGroup: VerbGroup.ichidan,
     examples: [
       ExampleSentence(
@@ -1231,6 +1594,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'iru',
     english: 'To exist / To be (people/animals)',
     category: WordCategory.verb,
+    contexts: {ContextCategory.home, ContextCategory.party, ContextCategory.work},
     verbGroup: VerbGroup.ichidan,
     examples: [
       ExampleSentence(
@@ -1248,6 +1612,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'oyogu',
     english: 'To swim',
     category: WordCategory.verb,
+    contexts: {ContextCategory.travel, ContextCategory.weather},
     verbGroup: VerbGroup.godan,
     examples: [
       ExampleSentence(
@@ -1265,6 +1630,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'asobu',
     english: 'To play / Hang out',
     category: WordCategory.verb,
+    contexts: {ContextCategory.party, ContextCategory.social, ContextCategory.travel},
     verbGroup: VerbGroup.godan,
     examples: [
       ExampleSentence(
@@ -1282,6 +1648,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'shinu',
     english: 'To die',
     category: WordCategory.verb,
+    contexts: {ContextCategory.health},
     verbGroup: VerbGroup.godan,
     examples: [
       ExampleSentence(
@@ -1299,6 +1666,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'tatsu',
     english: 'To stand up',
     category: WordCategory.verb,
+    contexts: {ContextCategory.train, ContextCategory.wedding, ContextCategory.school},
     verbGroup: VerbGroup.godan,
     examples: [
       ExampleSentence(
@@ -1316,6 +1684,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'aruku',
     english: 'To walk',
     category: WordCategory.verb,
+    contexts: {ContextCategory.travel, ContextCategory.train, ContextCategory.health},
     verbGroup: VerbGroup.godan,
     examples: [
       ExampleSentence(
@@ -1333,6 +1702,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'hataraku',
     english: 'To work',
     category: WordCategory.verb,
+    contexts: {ContextCategory.work},
     verbGroup: VerbGroup.godan,
     examples: [
       ExampleSentence(
@@ -1350,6 +1720,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'benkyou suru',
     english: 'To study',
     category: WordCategory.verb,
+    contexts: {ContextCategory.school},
     verbGroup: VerbGroup.irregularSuru,
     examples: [
       ExampleSentence(
@@ -1367,6 +1738,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'kaimono suru',
     english: 'To shop',
     category: WordCategory.verb,
+    contexts: {ContextCategory.shop, ContextCategory.cooking},
     verbGroup: VerbGroup.irregularSuru,
     examples: [
       ExampleSentence(
@@ -1388,6 +1760,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'ii',
     english: 'Good / Fine',
     category: WordCategory.adjective,
+    contexts: {
+      ContextCategory.social,
+      ContextCategory.weather,
+      ContextCategory.health,
+      ContextCategory.shop,
+    },
     isEveryday: true,
     everydayRank: 41,
     adjectiveType: AdjectiveType.iAdjective,
@@ -1399,6 +1777,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'ookii',
     english: 'Big / Large',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.shop, ContextCategory.home, ContextCategory.restaurant},
     isEveryday: true,
     everydayRank: 42,
     adjectiveType: AdjectiveType.iAdjective,
@@ -1410,6 +1789,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'chiisai',
     english: 'Small / Little',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.shop, ContextCategory.cooking, ContextCategory.home},
     isEveryday: true,
     everydayRank: 43,
     adjectiveType: AdjectiveType.iAdjective,
@@ -1421,6 +1801,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'takai',
     english: 'Expensive / High',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.shop, ContextCategory.restaurant, ContextCategory.hotel},
     adjectiveType: AdjectiveType.iAdjective,
   ),
   WordEntry(
@@ -1430,6 +1811,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'yasui',
     english: 'Cheap / Inexpensive',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.shop, ContextCategory.restaurant, ContextCategory.hotel},
     adjectiveType: AdjectiveType.iAdjective,
   ),
   WordEntry(
@@ -1439,6 +1821,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'oishii',
     english: 'Delicious',
     category: WordCategory.adjective,
+    contexts: {
+      ContextCategory.restaurant,
+      ContextCategory.cooking,
+      ContextCategory.party,
+      ContextCategory.wedding,
+    },
     isEveryday: true,
     everydayRank: 44,
     adjectiveType: AdjectiveType.iAdjective,
@@ -1450,6 +1838,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'atarashii',
     english: 'New',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.shop, ContextCategory.hotel, ContextCategory.work},
     adjectiveType: AdjectiveType.iAdjective,
   ),
   WordEntry(
@@ -1459,6 +1848,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'furui',
     english: 'Old (things)',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.travel, ContextCategory.home},
     adjectiveType: AdjectiveType.iAdjective,
   ),
   WordEntry(
@@ -1468,6 +1858,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'warui',
     english: 'Bad',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.health, ContextCategory.weather, ContextCategory.social},
     adjectiveType: AdjectiveType.iAdjective,
   ),
   WordEntry(
@@ -1477,6 +1868,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'atsui',
     english: 'Hot (weather)',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.weather},
     adjectiveType: AdjectiveType.iAdjective,
   ),
   WordEntry(
@@ -1486,6 +1878,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'samui',
     english: 'Cold (weather)',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.weather},
     adjectiveType: AdjectiveType.iAdjective,
   ),
   WordEntry(
@@ -1495,6 +1888,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'tanoshii',
     english: 'Fun / Enjoyable',
     category: WordCategory.adjective,
+    contexts: {
+      ContextCategory.party,
+      ContextCategory.wedding,
+      ContextCategory.travel,
+      ContextCategory.school,
+    },
     adjectiveType: AdjectiveType.iAdjective,
   ),
   WordEntry(
@@ -1504,6 +1903,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'muzukashii',
     english: 'Difficult',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.school, ContextCategory.work, ContextCategory.cooking},
     adjectiveType: AdjectiveType.iAdjective,
   ),
   WordEntry(
@@ -1513,6 +1913,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'kantan',
     english: 'Easy / Simple',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.school, ContextCategory.cooking, ContextCategory.work},
     adjectiveType: AdjectiveType.naAdjective,
   ),
   WordEntry(
@@ -1522,6 +1923,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'isogashii',
     english: 'Busy',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.work, ContextCategory.school},
     adjectiveType: AdjectiveType.iAdjective,
   ),
   WordEntry(
@@ -1531,6 +1933,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'chikai',
     english: 'Near / Close',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.train, ContextCategory.travel, ContextCategory.hotel},
     adjectiveType: AdjectiveType.iAdjective,
   ),
   WordEntry(
@@ -1540,6 +1943,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'tooi',
     english: 'Far',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.train, ContextCategory.travel},
     adjectiveType: AdjectiveType.iAdjective,
   ),
   WordEntry(
@@ -1549,6 +1953,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'hayai',
     english: 'Early / Fast',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.train, ContextCategory.work, ContextCategory.school},
     adjectiveType: AdjectiveType.iAdjective,
   ),
   WordEntry(
@@ -1558,6 +1963,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'osoi',
     english: 'Slow / Late',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.train, ContextCategory.work, ContextCategory.party},
     adjectiveType: AdjectiveType.iAdjective,
   ),
   WordEntry(
@@ -1567,6 +1973,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'suki',
     english: 'Like / Favorite',
     category: WordCategory.adjective,
+    contexts: {
+      ContextCategory.restaurant,
+      ContextCategory.party,
+      ContextCategory.social,
+      ContextCategory.shop,
+    },
     isEveryday: true,
     everydayRank: 45,
     adjectiveType: AdjectiveType.naAdjective,
@@ -1578,6 +1990,12 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'kirei',
     english: 'Clean / Beautiful',
     category: WordCategory.adjective,
+    contexts: {
+      ContextCategory.wedding,
+      ContextCategory.travel,
+      ContextCategory.hotel,
+      ContextCategory.home,
+    },
     adjectiveType: AdjectiveType.naAdjective,
   ),
   WordEntry(
@@ -1587,6 +2005,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'shizuka',
     english: 'Quiet',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.hotel, ContextCategory.home, ContextCategory.school},
     adjectiveType: AdjectiveType.naAdjective,
   ),
   WordEntry(
@@ -1596,6 +2015,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'benri',
     english: 'Convenient',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.train, ContextCategory.travel, ContextCategory.shop},
     adjectiveType: AdjectiveType.naAdjective,
   ),
   WordEntry(
@@ -1605,6 +2025,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'genki',
     english: 'Healthy / Energetic',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.health, ContextCategory.social},
     adjectiveType: AdjectiveType.naAdjective,
   ),
   WordEntry(
@@ -1614,6 +2035,7 @@ const List<WordEntry> kVocabularyList = [
     romaji: 'taisetsu',
     english: 'Important / Precious',
     category: WordCategory.adjective,
+    contexts: {ContextCategory.wedding, ContextCategory.social, ContextCategory.work},
     adjectiveType: AdjectiveType.naAdjective,
   ),
 ];

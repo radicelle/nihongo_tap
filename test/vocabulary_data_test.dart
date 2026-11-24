@@ -70,4 +70,68 @@ void main() {
       isTrue,
     );
   });
+
+  test('all words have non-empty contexts and generous coverage per category', () {
+    expect(kVocabularyList.length, greaterThanOrEqualTo(250));
+
+    for (final word in kVocabularyList) {
+      expect(
+        word.contexts,
+        isNotEmpty,
+        reason: 'Missing contexts on ${word.id}',
+      );
+    }
+
+    for (final category in ContextCategory.values) {
+      final matching = filterVocabulary(
+        kVocabularyList,
+        FilterTab.everyday,
+        '',
+        context: category,
+      );
+      expect(
+        matching.length,
+        greaterThanOrEqualTo(10),
+        reason: 'Too few words in context ${category.name}',
+      );
+    }
+
+    final weddingWords = filterVocabulary(
+      kVocabularyList,
+      FilterTab.everyday,
+      '',
+      context: ContextCategory.wedding,
+    );
+    expect(weddingWords.length, greaterThanOrEqualTo(20));
+    expect(weddingWords.any((w) => w.id == 'wedding_kekkonshiki'), isTrue);
+  });
+
+  test('filterVocabulary combines FilterTab and ContextCategory cleanly', () {
+    final weddingAll = filterVocabulary(
+      kVocabularyList,
+      FilterTab.everyday,
+      '',
+      context: ContextCategory.wedding,
+    );
+    expect(
+      weddingAll.every((w) => w.contexts.contains(ContextCategory.wedding)),
+      isTrue,
+    );
+
+    final weddingVerbs = filterVocabulary(
+      kVocabularyList,
+      FilterTab.verbs,
+      '',
+      context: ContextCategory.wedding,
+    );
+    expect(weddingVerbs, isNotEmpty);
+    expect(
+      weddingVerbs.every(
+        (w) =>
+            w.category == WordCategory.verb &&
+            w.contexts.contains(ContextCategory.wedding),
+      ),
+      isTrue,
+    );
+  });
 }

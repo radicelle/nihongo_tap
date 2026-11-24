@@ -1,3 +1,55 @@
+/// Situational / lexical-field context categories for filtering vocabulary.
+enum ContextCategory {
+  wedding,
+  restaurant,
+  shop,
+  train,
+  party,
+  cooking,
+  school,
+  hotel,
+  travel,
+  home,
+  work,
+  health,
+  weather,
+  social;
+
+  String get label => switch (this) {
+        ContextCategory.wedding => 'Wedding',
+        ContextCategory.restaurant => 'Restaurant',
+        ContextCategory.shop => 'Shop',
+        ContextCategory.train => 'Train',
+        ContextCategory.party => 'Party',
+        ContextCategory.cooking => 'Cooking',
+        ContextCategory.school => 'School',
+        ContextCategory.hotel => 'Hotel',
+        ContextCategory.travel => 'Travel',
+        ContextCategory.home => 'Home',
+        ContextCategory.work => 'Work',
+        ContextCategory.health => 'Health',
+        ContextCategory.weather => 'Weather',
+        ContextCategory.social => 'Social',
+      };
+
+  String get japaneseLabel => switch (this) {
+        ContextCategory.wedding => '結婚式',
+        ContextCategory.restaurant => 'レストラン',
+        ContextCategory.shop => '買い物',
+        ContextCategory.train => '電車',
+        ContextCategory.party => 'パーティー',
+        ContextCategory.cooking => '料理',
+        ContextCategory.school => '学校',
+        ContextCategory.hotel => 'ホテル',
+        ContextCategory.travel => '旅行',
+        ContextCategory.home => '家',
+        ContextCategory.work => '仕事',
+        ContextCategory.health => '病院',
+        ContextCategory.weather => '天気',
+        ContextCategory.social => '挨拶',
+      };
+}
+
 /// Categories of Japanese vocabulary in Nihongo Tap.
 enum WordCategory {
   noun,
@@ -102,6 +154,7 @@ class WordEntry {
     required this.romaji,
     required this.english,
     required this.category,
+    this.contexts = const {},
     this.isEveryday = false,
     this.everydayRank = 999,
     this.verbGroup,
@@ -115,6 +168,7 @@ class WordEntry {
   final String romaji;
   final String english;
   final WordCategory category;
+  final Set<ContextCategory> contexts;
   final bool isEveryday;
   final int everydayRank;
   final VerbGroup? verbGroup;

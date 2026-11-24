@@ -169,4 +169,45 @@ void main() {
     await tester.pump();
     expect(find.text('Update available (v1.0.5)'), findsNothing);
   });
+
+  testWidgets('context dropdown defaults to All contexts and filters by context', (
+    tester,
+  ) async {
+    final speech = FakeSpeechService();
+    await tester.pumpWidget(NihongoTapApp(speechService: speech));
+    await tester.pumpAndSettle();
+
+    expect(find.text('All contexts'), findsOneWidget);
+    expect(find.text('ありがとう'), findsOneWidget);
+
+    // Open context dropdown and select Wedding · 結婚式
+    await tester.tap(find.byKey(const Key('context_dropdown')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Wedding · 結婚式').last);
+    await tester.pumpAndSettle();
+
+    expect(find.text('All contexts'), findsNothing);
+    expect(find.text('Wedding · 結婚式'), findsOneWidget);
+    expect(find.byType(Scrollable), findsNWidgets(2));
+
+    // Wedding-tagged everyday word remains, non-wedding word is filtered out,
+    // and non-everyday wedding words are visible in the filtered list.
+    expect(find.text('ありがとう'), findsOneWidget);
+    expect(find.text('水'), findsNothing);
+    await tester.scrollUntilVisible(
+      find.text('結婚式'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.text('結婚式'), findsOneWidget);
+
+    // Reset back to All contexts
+    await tester.tap(find.byKey(const Key('context_dropdown')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('All contexts').last);
+    await tester.pumpAndSettle();
+
+    expect(find.text('ありがとう'), findsOneWidget);
+    expect(find.text('結婚式'), findsNothing);
+  });
 }

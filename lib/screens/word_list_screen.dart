@@ -30,6 +30,7 @@ class _WordListScreenState extends State<WordListScreen> {
   static const Color _mutedInk = Color(0xFF667085);
 
   FilterTab _selectedTab = FilterTab.everyday;
+  ContextCategory? _selectedContext;
   bool _showRomaji = true;
   bool _slowSpeed = false;
   bool _isSearching = false;
@@ -39,6 +40,7 @@ class _WordListScreenState extends State<WordListScreen> {
   AppUpdateInfo? _availableUpdate;
 
   final TextEditingController _searchController = TextEditingController();
+  final ScrollController _listScrollController = ScrollController();
   Timer? _speakingTimer;
 
   @override
@@ -66,7 +68,14 @@ class _WordListScreenState extends State<WordListScreen> {
   void dispose() {
     _speakingTimer?.cancel();
     _searchController.dispose();
+    _listScrollController.dispose();
     super.dispose();
+  }
+
+  void _resetListScroll() {
+    if (_listScrollController.hasClients) {
+      _listScrollController.jumpTo(0);
+    }
   }
 
   Future<void> _speakWord(WordEntry word) async {
@@ -109,7 +118,12 @@ class _WordListScreenState extends State<WordListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final words = filterVocabulary(widget.vocabulary, _selectedTab, _searchQuery);
+    final words = filterVocabulary(
+      widget.vocabulary,
+      _selectedTab,
+      _searchQuery,
+      context: _selectedContext,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -172,7 +186,10 @@ class _WordListScreenState extends State<WordListScreen> {
                   label: Text(tab.label),
                   selected: selected,
                   showCheckmark: false,
-                  onSelected: (_) => setState(() => _selectedTab = tab),
+                  onSelected: (_) {
+                    setState(() => _selectedTab = tab);
+                    _resetListScroll();
+                  },
                   selectedColor: _indigo,
                   backgroundColor: Colors.white,
                   side: BorderSide(
@@ -272,6 +289,14 @@ class _WordListScreenState extends State<WordListScreen> {
                 ],
               ),
             ),
+          _ContextFilterBar(
+            selectedContext: _selectedContext,
+            wordCount: words.length,
+            onChanged: (value) {
+              setState(() => _selectedContext = value);
+              _resetListScroll();
+            },
+          ),
           Expanded(
             child: words.isEmpty
                 ? const Center(
@@ -281,6 +306,7 @@ class _WordListScreenState extends State<WordListScreen> {
                     ),
                   )
                 : ListView.separated(
+                    controller: _listScrollController,
                     itemCount: words.length,
                     separatorBuilder: (_, _) => const Divider(
                       height: 1,
@@ -349,6 +375,89 @@ class _HeaderTogglePill extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _ContextFilterBar extends StatelessWidget {
+  const _ContextFilterBar({
+    required this.selectedContext,
+    required this.wordCount,
+    required this.onChanged,
+  });
+
+  final ContextCategory? selectedContext;
+  final int wordCount;
+  final ValueChanged<ContextCategory?> onChanged;
+
+  static const Color _indigo = Color(0xFF2B3A67);
+  static const Color _mutedInk = Color(0xFF667085);
+
+  @override
+  Widget build(BuildContext context) {
+    final isFiltered = selectedContext != null;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: const BoxDecoration(
+        color: Color(0xFFFAFAFA),
+        border: Border(
+          bottom: BorderSide(color: Color(0xFFEAECF0)),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+            decoration: BoxDecoration(
+              color: isFiltered ? const Color(0xFFEEF1F8) : Colors.white,
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(
+                color: isFiltered ? _indigo : const Color(0xFFD0D5DD),
+              ),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<ContextCategory?>(
+                key: const Key('context_dropdown'),
+                value: selectedContext,
+                isDense: true,
+                icon: Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  size: 18,
+                  color: isFiltered ? _indigo : _mutedInk,
+                ),
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: isFiltered ? _indigo : const Color(0xFF344054),
+                ),
+                items: [
+                  const DropdownMenuItem<ContextCategory?>(
+                    value: null,
+                    child: Text('All contexts'),
+                  ),
+                  for (final category in ContextCategory.values)
+                    DropdownMenuItem<ContextCategory?>(
+                      value: category,
+                      child: Text('${category.label} · ${category.japaneseLabel}'),
+                    ),
+                ],
+                onChanged: onChanged,
+              ),
+            ),
+          ),
+          const Spacer(),
+          Text(
+            '$wordCount words',
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: _mutedInk,
+            ),
+          ),
+        ],
       ),
     );
   }
