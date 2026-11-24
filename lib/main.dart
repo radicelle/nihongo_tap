@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:nihongo_tap/screens/word_list_screen.dart';
 import 'package:nihongo_tap/services/speech_service.dart';
+import 'package:nihongo_tap/services/update_service.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -9,9 +10,14 @@ void main() {
 
 /// Root application widget for Nihongo Tap.
 class NihongoTapApp extends StatefulWidget {
-  const NihongoTapApp({super.key, this.speechService});
+  const NihongoTapApp({
+    super.key,
+    this.speechService,
+    this.updateService,
+  });
 
   final SpeechService? speechService;
+  final UpdateService? updateService;
 
   @override
   State<NihongoTapApp> createState() => _NihongoTapAppState();
@@ -19,6 +25,7 @@ class NihongoTapApp extends StatefulWidget {
 
 class _NihongoTapAppState extends State<NihongoTapApp> {
   late final SpeechService _speechService;
+  late final UpdateService _updateService;
   late final bool _ownsSpeechService;
 
   @override
@@ -26,6 +33,7 @@ class _NihongoTapAppState extends State<NihongoTapApp> {
     super.initState();
     _ownsSpeechService = widget.speechService == null;
     _speechService = widget.speechService ?? FlutterTtsSpeechService();
+    _updateService = widget.updateService ?? GitHubUpdateService();
   }
 
   @override
@@ -49,7 +57,10 @@ class _NihongoTapAppState extends State<NihongoTapApp> {
           surface: Colors.white,
         ),
       ),
-      home: WordListScreen(speechService: _speechService),
+      home: WordListScreen(
+        speechService: _speechService,
+        updateService: _updateService,
+      ),
     );
   }
 }

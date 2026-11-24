@@ -1,6 +1,24 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nihongo_tap/main.dart';
 import 'package:nihongo_tap/services/speech_service.dart';
+import 'package:nihongo_tap/services/update_service.dart';
+
+class FakeUpdateService implements UpdateService {
+  FakeUpdateService({this.updateInfo});
+
+  final AppUpdateInfo? updateInfo;
+  final List<String> openedUrls = [];
+
+  @override
+  Future<AppUpdateInfo?> checkForUpdate() async => updateInfo;
+
+  @override
+  Future<bool> openDownloadUrl(String url) async {
+    openedUrls.add(url);
+    return true;
+  }
+}
 
 class FakeSpeechService implements SpeechService {
   FakeSpeechService({this.available = true});
@@ -121,5 +139,34 @@ void main() {
       find.textContaining('Japanese voice not detected'),
       findsOneWidget,
     );
+  });
+
+  testWidgets('shows update banner when newer release exists and handles tap/dismiss', (
+    tester,
+  ) async {
+    final speech = FakeSpeechService();
+    const updateInfo = AppUpdateInfo(
+      versionName: '1.0.5',
+      versionCode: 5,
+      downloadUrl:
+          'https://github.com/radicelle/nihongo_tap/releases/download/v1.0.5/nihongo-tap-v1.0.5.apk',
+    );
+    final updater = FakeUpdateService(updateInfo: updateInfo);
+
+    await tester.pumpWidget(
+      NihongoTapApp(speechService: speech, updateService: updater),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Update available (v1.0.5)'), findsOneWidget);
+    expect(find.text('Download'), findsOneWidget);
+
+    await tester.tap(find.text('Download'));
+    await tester.pump();
+    expect(updater.openedUrls, [updateInfo.downloadUrl]);
+
+    await tester.tap(find.byIcon(Icons.close));
+    await tester.pump();
+    expect(find.text('Update available (v1.0.5)'), findsNothing);
   });
 }

@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:nihongo_tap/data/vocabulary_data.dart';
 import 'package:nihongo_tap/models/word_entry.dart';
 import 'package:nihongo_tap/services/speech_service.dart';
+import 'package:nihongo_tap/services/update_service.dart';
 import 'package:nihongo_tap/widgets/verb_conjugation_sheet.dart';
 import 'package:nihongo_tap/widgets/word_tile.dart';
 
@@ -12,10 +13,12 @@ class WordListScreen extends StatefulWidget {
   const WordListScreen({
     super.key,
     required this.speechService,
+    this.updateService,
     this.vocabulary = kVocabularyList,
   });
 
   final SpeechService speechService;
+  final UpdateService? updateService;
   final List<WordEntry> vocabulary;
 
   @override
@@ -33,6 +36,7 @@ class _WordListScreenState extends State<WordListScreen> {
   String _searchQuery = '';
   String? _speakingWordId;
   bool _showTtsBanner = false;
+  AppUpdateInfo? _availableUpdate;
 
   final TextEditingController _searchController = TextEditingController();
   Timer? _speakingTimer;
@@ -41,6 +45,7 @@ class _WordListScreenState extends State<WordListScreen> {
   void initState() {
     super.initState();
     _initTts();
+    _checkForUpdates();
   }
 
   Future<void> _initTts() async {
@@ -49,6 +54,12 @@ class _WordListScreenState extends State<WordListScreen> {
     if (!available) {
       setState(() => _showTtsBanner = true);
     }
+  }
+
+  Future<void> _checkForUpdates() async {
+    final update = await widget.updateService?.checkForUpdate();
+    if (!mounted || update == null) return;
+    setState(() => _availableUpdate = update);
   }
 
   @override
@@ -183,6 +194,56 @@ class _WordListScreenState extends State<WordListScreen> {
       ),
       body: Column(
         children: [
+          if (_availableUpdate != null)
+            Container(
+              width: double.infinity,
+              color: const Color(0xFFEEF1F8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.system_update,
+                    size: 18,
+                    color: _indigo,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      'Update available (v${_availableUpdate!.versionName})',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF1F2430),
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      final url = _availableUpdate?.downloadUrl;
+                      if (url != null) {
+                        widget.updateService?.openDownloadUrl(url);
+                      }
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: _indigo,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      minimumSize: const Size(0, 32),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: const Text(
+                      'Download',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, size: 18),
+                    onPressed: () => setState(() => _availableUpdate = null),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ],
+              ),
+            ),
           if (_showTtsBanner)
             Container(
               width: double.infinity,
