@@ -1,0 +1,125 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:nihongo_tap/main.dart';
+import 'package:nihongo_tap/services/speech_service.dart';
+
+class FakeSpeechService implements SpeechService {
+  FakeSpeechService({this.available = true});
+
+  final bool available;
+  final List<({String text, bool slow})> spoken = [];
+  bool initialized = false;
+  bool disposed = false;
+
+  @override
+  Future<bool> initialize() async {
+    initialized = true;
+    return available;
+  }
+
+  @override
+  Future<void> speak(String text, {bool slow = false}) async {
+    spoken.add((text: text, slow: slow));
+  }
+
+  @override
+  Future<void> stop() async {}
+
+  @override
+  void dispose() {
+    disposed = true;
+  }
+}
+
+void main() {
+  testWidgets('displays Everyday list and speaks kana when a word is tapped', (
+    tester,
+  ) async {
+    final speech = FakeSpeechService();
+    await tester.pumpWidget(NihongoTapApp(speechService: speech));
+    await tester.pumpAndSettle();
+
+    expect(speech.initialized, isTrue);
+    expect(find.text('ありがとう'), findsOneWidget);
+    expect(find.text('Thank you'), findsOneWidget);
+
+    await tester.tap(find.text('ありがとう'));
+    await tester.pump(const Duration(seconds: 1));
+
+    expect(speech.spoken.length, 1);
+    expect(speech.spoken.first.text, 'ありがとう');
+    expect(speech.spoken.first.slow, isFalse);
+  });
+
+  testWidgets('Romaji toggle hides and shows romaji', (tester) async {
+    final speech = FakeSpeechService();
+    await tester.pumpWidget(NihongoTapApp(speechService: speech));
+    await tester.pumpAndSettle();
+
+    expect(find.text('arigatou'), findsOneWidget);
+
+    await tester.tap(find.text('Aa'));
+    await tester.pump();
+
+    expect(find.text('arigatou'), findsNothing);
+
+    await tester.tap(find.text('Aa'));
+    await tester.pump();
+
+    expect(find.text('arigatou'), findsOneWidget);
+  });
+
+  testWidgets('Slow toggle passes slow: true to SpeechService', (tester) async {
+    final speech = FakeSpeechService();
+    await tester.pumpWidget(NihongoTapApp(speechService: speech));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('1×'));
+    await tester.pump();
+    expect(find.text('0.7×'), findsOneWidget);
+
+    await tester.tap(find.text('すみません'));
+    await tester.pump(const Duration(seconds: 1));
+
+    expect(speech.spoken.last.text, 'すみません');
+    expect(speech.spoken.last.slow, isTrue);
+  });
+
+  testWidgets('Verbs tab opens conjugation sheet and speaks conjugated form', (
+    tester,
+  ) async {
+    final speech = FakeSpeechService();
+    await tester.pumpWidget(NihongoTapApp(speechService: speech));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Verbs'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('食べる'), findsOneWidget);
+    expect(find.text('Forms'), findsWidgets);
+
+    await tester.tap(find.text('Forms').first);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Ru-verb (Ichidan)'), findsOneWidget);
+    expect(find.text('Polite'), findsOneWidget);
+    expect(find.text('たべます'), findsOneWidget);
+
+    await tester.tap(find.text('Polite'));
+    await tester.pump();
+
+    expect(speech.spoken.last.text, 'たべます');
+  });
+
+  testWidgets('shows subtle banner when Japanese TTS is unavailable', (
+    tester,
+  ) async {
+    final speech = FakeSpeechService(available: false);
+    await tester.pumpWidget(NihongoTapApp(speechService: speech));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.textContaining('Japanese voice not detected'),
+      findsOneWidget,
+    );
+  });
+}
