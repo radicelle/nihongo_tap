@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 720" width="360" height="720" role="img" aria-label="Nihongo Tap Verb Conjugations sheet preview">
+  <!-- Phone outer frame -->
+  <rect x="8" y="8" width="344" height="704" rx="34" fill="#1F2430"/>
+  <rect x="16" y="16" width="328" height="688" rx="28" fill="#98A2B3"/>
+
+  <!-- Status bar area (dimmed behind sheet) -->
+  <text x="38" y="40" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#1F2430">9:41</text>
+  <rect x="148" y="26" width="64" height="14" rx="7" fill="#1F2430"/>
+
+  <!-- Bottom sheet -->
+  <path d="M16 96 C16 80 28 70 42 70 L318 70 C332 70 344 80 344 96 L344 676 C344 692 332 704 318 704 L42 704 C28 704 16 692 16 676 Z" fill="#FFFFFF"/>
+
+  <!-- Drag handle -->
+  <rect x="160" y="82" width="40" height="4" rx="2" fill="#D0D5DD"/>
+
+  <!-- Header -->
+  <text x="34" y="114" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="13" fill="#667085">たべる</text>
+  <text x="34" y="144" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="26" font-weight="700" fill="#1F2430">食べる</text>
+  <text x="34" y="164" font-family="system-ui, sans-serif" font-size="13.5" fill="#667085">taberu · To eat</text>
+
+  <!-- Tonal speaker circle -->
+  <circle cx="306" cy="128" r="20" fill="#EEF1F8"/>
+  <path d="M298 125 L302 125 L307 120 L307 136 L302 131 L298 131 Z" fill="#2B3A67"/>
+  <path d="M311 123 C314 126 314 130 311 133" fill="none" stroke="#2B3A67" stroke-width="1.6" stroke-linecap="round"/>
+
+  <!-- Verb group rule pill -->
+  <rect x="34" y="180" width="292" height="34" rx="10" fill="#F5F7FB"/>
+  <text x="46" y="201" font-family="system-ui, sans-serif" font-size="11.5" font-weight="700" fill="#2B3A67">Ru-verb (Ichidan)</text>
+  <text x="150" y="201" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="11.5" fill="#667085">Drop る &amp; add ending.</text>
+
+  <!-- Section label -->
+  <text x="34" y="238" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#667085">Tap any form to hear it</text>
+
+  <!-- Conjugations card -->
+  <rect x="34" y="248" width="292" height="318" rx="14" fill="#FFFFFF" stroke="#EAECF0" stroke-width="1.2"/>
+
+  <!-- Row 1: Polite -->
+  <text x="48" y="272" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#1F2430">Polite</text>
+  <text x="48" y="287" font-family="system-ui, sans-serif" font-size="10.5" fill="#667085">Everyday polite form</text>
+  <text x="312" y="274" text-anchor="end" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="16.5" font-weight="600">
+    <tspan fill="#1F2430">食べ</tspan><tspan fill="#C84B31" font-weight="700">ます</tspan>
+  </text>
+  <text x="312" y="290" text-anchor="end" font-family="system-ui, sans-serif" font-size="10.5" fill="#667085">tabemasu</text>
+  <line x1="34" y1="301" x2="326" y2="301" stroke="#EAECF0" stroke-width="1"/>
+
+  <!-- Row 2: Polite Negative -->
+  <text x="48" y="325" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#1F2430">Polite Negative</text>
+  <text x="48" y="340" font-family="system-ui, sans-serif" font-size="10.5" fill="#667085">Polite "don't ..."</text>
+  <text x="312" y="327" text-anchor="end" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="16.5" font-weight="600">
+    <tspan fill="#1F2430">食べ</tspan><tspan fill="#C84B31" font-weight="700">ません</tspan>
+  </text>
+  <text x="312" y="343" text-anchor="end" font-family="system-ui, sans-serif" font-size="10.5" fill="#667085">tabemasen</text>
+  <line x1="34" y1="354" x2="326" y2="354" stroke="#EAECF0" stroke-width="1"/>
+
+  <!-- Row 3: Past (Casual) -->
+  <text x="48" y="378" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#1F2430">Past (Casual)</text>
+  <text x="48" y="393" font-family="system-ui, sans-serif" font-size="10.5" fill="#667085">Casual past tense</text>
+  <text x="312" y="380" text-anchor="end" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="16.5" font-weight="600">
+    <tspan fill="#1F2430">食べ</tspan><tspan fill="#C84B31" font-weight="700">た</tspan>
+  </text>
+  <text x="312" y="396" text-anchor="end" font-family="system-ui, sans-serif" font-size="10.5" fill="#667085">tabeta</text>
+  <line x1="34" y1="407" x2="326" y2="407" stroke="#EAECF0" stroke-width="1"/>
+
+  <!-- Row 4: Te-form (highlighted active) -->
+  <rect x="35" y="408" width="290" height="52" fill="#FFF5F2"/>
+  <text x="48" y="431" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#1F2430">Te-form</text>
+  <text x="48" y="446" font-family="system-ui, sans-serif" font-size="10.5" fill="#667085">Connect / + ください</text>
+  <text x="312" y="433" text-anchor="end" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="16.5" font-weight="600">
+    <tspan fill="#1F2430">食べ</tspan><tspan fill="#C84B31" font-weight="700">て</tspan>
+  </text>
+  <text x="312" y="449" text-anchor="end" font-family="system-ui, sans-serif" font-size="10.5" fill="#667085">tabete</text>
+  <line x1="34" y1="460" x2="326" y2="460" stroke="#EAECF0" stroke-width="1"/>
+
+  <!-- Row 5: Want to -->
+  <text x="48" y="484" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#1F2430">Want to</text>
+  <text x="48" y="499" font-family="system-ui, sans-serif" font-size="10.5" fill="#667085">Express "want to ..."</text>
+  <text x="312" y="486" text-anchor="end" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="16.5" font-weight="600">
+    <tspan fill="#1F2430">食べ</tspan><tspan fill="#C84B31" font-weight="700">たい</tspan>
+  </text>
+  <text x="312" y="502" text-anchor="end" font-family="system-ui, sans-serif" font-size="10.5" fill="#667085">tabetai</text>
+  <line x1="34" y1="513" x2="326" y2="513" stroke="#EAECF0" stroke-width="1"/>
+
+  <!-- Row 6: Can do -->
+  <text x="48" y="537" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#1F2430">Can do</text>
+  <text x="48" y="552" font-family="system-ui, sans-serif" font-size="10.5" fill="#667085">Ability / "can ..."</text>
+  <text x="312" y="539" text-anchor="end" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="16.5" font-weight="600">
+    <tspan fill="#1F2430">食べ</tspan><tspan fill="#C84B31" font-weight="700">られる</tspan>
+  </text>
+  <text x="312" y="555" text-anchor="end" font-family="system-ui, sans-serif" font-size="10.5" fill="#667085">taberareru</text>
+
+  <!-- Example section -->
+  <text x="34" y="592" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#667085">How to use it</text>
+  <rect x="34" y="602" width="292" height="72" rx="12" fill="#F9FAFB" stroke="#EAECF0" stroke-width="1.2"/>
+  <path d="M48 634 L52 634 L57 629 L57 645 L52 640 L48 640 Z" fill="none" stroke="#667085" stroke-width="1.4" stroke-linejoin="round"/>
+  <text x="70" y="625" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="14" font-weight="600" fill="#1F2430">朝ご飯を食べます。</text>
+  <text x="70" y="643" font-family="system-ui, sans-serif" font-size="11" fill="#667085">Asagohan o tabemasu.</text>
+  <text x="70" y="661" font-family="system-ui, sans-serif" font-size="12" fill="#1F2430">I eat breakfast.</text>
+
+  <!-- Gesture bar -->
+  <rect x="132" y="692" width="96" height="4" rx="2" fill="#D0D5DD"/>
+</svg>

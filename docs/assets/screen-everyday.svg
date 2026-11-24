@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 720" width="360" height="720" role="img" aria-label="Nihongo Tap Everyday screen preview">
+  <!-- Phone outer frame -->
+  <rect x="8" y="8" width="344" height="704" rx="34" fill="#1F2430"/>
+  <rect x="16" y="16" width="328" height="688" rx="28" fill="#FAFAFA"/>
+
+  <!-- Status bar -->
+  <text x="38" y="40" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#1F2430">9:41</text>
+  <rect x="148" y="26" width="64" height="14" rx="7" fill="#1F2430"/>
+  <rect x="294" y="31" width="24" height="10" rx="2" fill="none" stroke="#1F2430" stroke-width="1.2"/>
+  <rect x="296" y="33" width="16" height="6" rx="1" fill="#1F2430"/>
+
+  <!-- AppBar -->
+  <text x="32" y="78" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="700" fill="#1F2430">Nihongo Tap</text>
+
+  <!-- Header pills: Aa, 1x, Search -->
+  <rect x="220" y="58" width="34" height="26" rx="13" fill="#EEF1F8" stroke="#2B3A67" stroke-width="1.2"/>
+  <text x="237" y="75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#2B3A67">Aa</text>
+
+  <rect x="260" y="58" width="32" height="26" rx="13" fill="#FFFFFF" stroke="#D0D5DD" stroke-width="1.2"/>
+  <text x="276" y="75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#667085">1×</text>
+
+  <circle cx="312" cy="70" r="6" fill="none" stroke="#344054" stroke-width="1.8"/>
+  <line x1="316" y1="74" x2="321" y2="79" stroke="#344054" stroke-width="1.8" stroke-linecap="round"/>
+
+  <!-- Filter chips -->
+  <g font-family="system-ui, sans-serif" font-size="11.5" font-weight="600">
+    <rect x="28" y="96" width="76" height="30" rx="15" fill="#2B3A67"/>
+    <text x="66" y="115" text-anchor="middle" fill="#FFFFFF">Everyday</text>
+
+    <rect x="110" y="96" width="60" height="30" rx="15" fill="#FFFFFF" stroke="#D0D5DD" stroke-width="1.2"/>
+    <text x="140" y="115" text-anchor="middle" fill="#344054">Nouns</text>
+
+    <rect x="176" y="96" width="56" height="30" rx="15" fill="#FFFFFF" stroke="#D0D5DD" stroke-width="1.2"/>
+    <text x="204" y="115" text-anchor="middle" fill="#344054">Verbs</text>
+
+    <rect x="238" y="96" width="84" height="30" rx="15" fill="#FFFFFF" stroke="#D0D5DD" stroke-width="1.2"/>
+    <text x="280" y="115" text-anchor="middle" fill="#344054">Adjectives</text>
+  </g>
+
+  <!-- Row 1: Active speaking word (ありがとう) -->
+  <rect x="16" y="138" width="328" height="82" fill="#FFF5F2"/>
+  <!-- Speaker active icon -->
+  <path d="M34 176 L39 176 L45 170 L45 188 L39 182 L34 182 Z" fill="#C84B31"/>
+  <path d="M49 173 C52 176 52 182 49 185" fill="none" stroke="#C84B31" stroke-width="1.8" stroke-linecap="round"/>
+  <text x="64" y="178" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="21" font-weight="600" fill="#1F2430">ありがとう</text>
+  <text x="64" y="198" font-family="system-ui, sans-serif" font-size="12" fill="#667085">arigatou</text>
+  <text x="326" y="183" text-anchor="end" font-family="system-ui, sans-serif" font-size="14" fill="#1F2430">Thank you</text>
+  <line x1="32" y1="220" x2="328" y2="220" stroke="#EAECF0" stroke-width="1"/>
+
+  <!-- Row 2: すみません -->
+  <rect x="16" y="221" width="328" height="82" fill="#FFFFFF"/>
+  <path d="M34 259 L39 259 L45 253 L45 271 L39 265 L34 265 Z" fill="none" stroke="#667085" stroke-width="1.5" stroke-linejoin="round"/>
+  <text x="64" y="261" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="21" font-weight="600" fill="#1F2430">すみません</text>
+  <text x="64" y="281" font-family="system-ui, sans-serif" font-size="12" fill="#667085">sumimasen</text>
+  <text x="326" y="266" text-anchor="end" font-family="system-ui, sans-serif" font-size="14" fill="#1F2430">Excuse me / Sorry</text>
+  <line x1="32" y1="303" x2="328" y2="303" stroke="#EAECF0" stroke-width="1"/>
+
+  <!-- Row 3: 水 (with kana reading above kanji) -->
+  <rect x="16" y="304" width="328" height="92" fill="#FFFFFF"/>
+  <path d="M34 347 L39 347 L45 341 L45 359 L39 353 L34 353 Z" fill="none" stroke="#667085" stroke-width="1.5" stroke-linejoin="round"/>
+  <text x="64" y="329" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="12" fill="#667085">みず</text>
+  <text x="64" y="355" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="22" font-weight="600" fill="#1F2430">水</text>
+  <text x="64" y="376" font-family="system-ui, sans-serif" font-size="12" fill="#667085">mizu</text>
+  <text x="326" y="354" text-anchor="end" font-family="system-ui, sans-serif" font-size="14" fill="#1F2430">Water</text>
+  <line x1="32" y1="396" x2="328" y2="396" stroke="#EAECF0" stroke-width="1"/>
+
+  <!-- Row 4: 食べる (Verb with Forms button) -->
+  <rect x="16" y="397" width="328" height="100" fill="#FFFFFF"/>
+  <path d="M34 444 L39 444 L45 438 L45 456 L39 450 L34 450 Z" fill="none" stroke="#667085" stroke-width="1.5" stroke-linejoin="round"/>
+  <text x="64" y="422" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="12" fill="#667085">たべる</text>
+  <text x="64" y="448" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="22" font-weight="600" fill="#1F2430">食べる</text>
+  <text x="64" y="469" font-family="system-ui, sans-serif" font-size="12" fill="#667085">taberu</text>
+  <text x="326" y="438" text-anchor="end" font-family="system-ui, sans-serif" font-size="14" fill="#1F2430">To eat</text>
+  <rect x="266" y="449" width="60" height="26" rx="13" fill="#FFFFFF" stroke="#D0D7E6" stroke-width="1.2"/>
+  <text x="296" y="466" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11.5" font-weight="600" fill="#2B3A67">Forms</text>
+  <line x1="32" y1="497" x2="328" y2="497" stroke="#EAECF0" stroke-width="1"/>
+
+  <!-- Row 5: 大きい (Adjective with い badge) -->
+  <rect x="16" y="498" width="328" height="92" fill="#FFFFFF"/>
+  <path d="M34 541 L39 541 L45 535 L45 553 L39 547 L34 547 Z" fill="none" stroke="#667085" stroke-width="1.5" stroke-linejoin="round"/>
+  <text x="64" y="523" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="12" fill="#667085">おおきい</text>
+  <text x="64" y="549" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="22" font-weight="600" fill="#1F2430">大きい</text>
+  <text x="64" y="570" font-family="system-ui, sans-serif" font-size="12" fill="#667085">ookii</text>
+  <rect x="234" y="534" width="20" height="18" rx="5" fill="#EEF1F8"/>
+  <text x="244" y="547" text-anchor="middle" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="10.5" font-weight="600" fill="#2B3A67">い</text>
+  <text x="326" y="548" text-anchor="end" font-family="system-ui, sans-serif" font-size="14" fill="#1F2430">Big / Large</text>
+  <line x1="32" y1="590" x2="328" y2="590" stroke="#EAECF0" stroke-width="1"/>
+
+  <!-- Row 6: 駅 -->
+  <rect x="16" y="591" width="328" height="88" fill="#FFFFFF"/>
+  <path d="M34 634 L39 634 L45 628 L45 646 L39 640 L34 640 Z" fill="none" stroke="#667085" stroke-width="1.5" stroke-linejoin="round"/>
+  <text x="64" y="616" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="12" fill="#667085">えき</text>
+  <text x="64" y="642" font-family="system-ui, 'Noto Sans JP', sans-serif" font-size="22" font-weight="600" fill="#1F2430">駅</text>
+  <text x="64" y="663" font-family="system-ui, sans-serif" font-size="12" fill="#667085">eki</text>
+  <text x="326" y="640" text-anchor="end" font-family="system-ui, sans-serif" font-size="14" fill="#1F2430">Train station</text>
+
+  <!-- Gesture bar -->
+  <rect x="132" y="692" width="96" height="4" rx="2" fill="#D0D5DD"/>
+</svg>

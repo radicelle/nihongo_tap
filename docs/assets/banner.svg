@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300" role="img" aria-label="Nihongo Tap banner">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FAFAFA"/>
+      <stop offset="100%" stop-color="#EEF1F8"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C84B31"/>
+      <stop offset="100%" stop-color="#E06147"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="300" rx="24" fill="url(#bg)" stroke="#E4E7EC" stroke-width="2"/>
+
+  <!-- Subtle Japanese decorative circle (hinomaru-inspired) -->
+  <circle cx="1040" cy="150" r="88" fill="#FFF5F2" stroke="#F6D5CD" stroke-width="2"/>
+  <circle cx="1040" cy="150" r="56" fill="url(#accentGrad)"/>
+  <text x="1040" y="164" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', 'Noto Sans JP', sans-serif" font-size="40" font-weight="700" fill="#FFFFFF">語</text>
+
+  <!-- App icon tile -->
+  <rect x="72" y="68" width="76" height="76" rx="20" fill="#2B3A67"/>
+  <text x="110" y="118" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', 'Noto Sans JP', sans-serif" font-size="34" font-weight="700" fill="#FFFFFF">あ</text>
+
+  <!-- Title & Japanese subtitle -->
+  <text x="168" y="102" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="42" font-weight="800" fill="#1F2430">Nihongo Tap</text>
+  <text x="430" y="102" font-family="system-ui, -apple-system, 'Segoe UI', 'Noto Sans JP', sans-serif" font-size="22" font-weight="600" fill="#667085">日本語タップ</text>
+
+  <!-- Tagline -->
+  <text x="168" y="138" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="20" fill="#475467">Tap any word to hear it · Simple everyday Japanese for Android</text>
+
+  <!-- Feature pills -->
+  <g font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="600">
+    <rect x="72" y="186" width="166" height="38" rx="19" fill="#FFFFFF" stroke="#D0D5DD" stroke-width="1.5"/>
+    <circle cx="96" cy="205" r="5" fill="#2B3A67"/>
+    <text x="110" y="210" fill="#1F2430">136 Everyday Words</text>
+
+    <rect x="254" y="186" width="164" height="38" rx="19" fill="#FFF5F2" stroke="#F4C7BC" stroke-width="1.5"/>
+    <circle cx="278" cy="205" r="5" fill="#C84B31"/>
+    <text x="292" y="210" fill="#C84B31">Tap-to-Hear TTS</text>
+
+    <rect x="434" y="186" width="170" height="38" rx="19" fill="#FFFFFF" stroke="#D0D5DD" stroke-width="1.5"/>
+    <circle cx="458" cy="205" r="5" fill="#2B3A67"/>
+    <text x="472" y="210" fill="#1F2430">Verb Conjugations</text>
+
+    <rect x="620" y="186" width="150" height="38" rx="19" fill="#FFFFFF" stroke="#D0D5DD" stroke-width="1.5"/>
+    <circle cx="644" cy="205" r="5" fill="#2B3A67"/>
+    <text x="658" y="210" fill="#1F2430">0.7× Slow Mode</text>
+  </g>
+</svg>
